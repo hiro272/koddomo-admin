@@ -19,15 +19,15 @@ export default function Dashboard() {
       supabase.rpc('admin_timeseries', { p_days: 30 }),
       supabase.rpc('admin_event_breakdown', { p_days: 30 }),
     ])
-    if (a.error) setErr('Não foi possível carregar os números agora.')
+    if (a.error) setErr("Couldn't load the numbers right now.")
     setOv(a.data || null)
     setSeries(b.data || [])
     setBreakdown(c.data || [])
     setLoading(false)
   }
 
-  if (loading) return <Spinner label="Buscando dados reais…" />
-  if (err) return <Empty icon="⚠️" title="Falha ao carregar">{err}</Empty>
+  if (loading) return <Spinner label="Fetching real data…" />
+  if (err) return <Empty icon="⚠️" title="Failed to load">{err}</Empty>
 
   const signupsTotal = series.reduce((s, d) => s + Number(d.signups || 0), 0)
   const eventsTotal = Number(ov?.events_total || 0)
@@ -35,33 +35,33 @@ export default function Dashboard() {
   return (
     <div>
       <PageHead
-        title="Painel"
-        subtitle="Números reais, direto do banco. Nada é simulado."
+        title="Dashboard"
+        subtitle="Real numbers, straight from the database. Nothing is simulated."
       />
 
       {/* Platform KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
-        <StatCard label="Famílias" value={nf.format(ov.families)} sub={`${nf.format(ov.signups_7d)} novas em 7 dias`} />
-        <StatCard label="Crianças" value={nf.format(ov.kids)} sub={`${nf.format(ov.parents)} responsáveis`} accent="soft" />
-        <StatCard label="Assinantes" value={nf.format(ov.paid_families)} sub={`de ${nf.format(ov.families)} famílias`} accent="amber" />
-        <StatCard label="Pedidos pendentes" value={nf.format(ov.requests_pending)} sub="aguardando aprovação" accent={ov.requests_pending > 0 ? 'danger' : 'teal'} />
+        <StatCard label="Families" value={nf.format(ov.families)} sub={`${nf.format(ov.signups_7d)} new in 7 days`} />
+        <StatCard label="Kids" value={nf.format(ov.kids)} sub={`${nf.format(ov.parents)} parents`} accent="soft" />
+        <StatCard label="Subscribers" value={nf.format(ov.paid_families)} sub={`of ${nf.format(ov.families)} families`} accent="amber" />
+        <StatCard label="Pending requests" value={nf.format(ov.requests_pending)} sub="awaiting approval" accent={ov.requests_pending > 0 ? 'danger' : 'teal'} />
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-3">
-        <StatCard label="Itens ativos" value={nf.format(ov.items_active)} sub={`${nf.format(ov.items)} no total`} accent="soft" />
-        <StatCard label="Valor catalogado" value={money(ov.collection_value_cents)} sub="aprox., soma em USD" accent="amber" />
-        <StatCard label="Novidades no ar" value={nf.format(ov.news_published)} sub={`${nf.format(ov.news_total)} no total`} />
-        <StatCard label="Vídeos no ar" value={nf.format(ov.videos_live)} sub={`${nf.format(ov.videos_total)} no total`} accent="soft" />
+        <StatCard label="Active items" value={nf.format(ov.items_active)} sub={`${nf.format(ov.items)} total`} accent="soft" />
+        <StatCard label="Catalogued value" value={money(ov.collection_value_cents)} sub="approx., summed in USD" accent="amber" />
+        <StatCard label="Published news" value={nf.format(ov.news_published)} sub={`${nf.format(ov.news_total)} total`} />
+        <StatCard label="Live videos" value={nf.format(ov.videos_live)} sub={`${nf.format(ov.videos_total)} total`} accent="soft" />
       </div>
 
       {/* Signups chart */}
       <Card className="p-5 mt-5">
         <div className="flex items-baseline justify-between">
-          <h3 className="font-display font-600 text-[16px] text-ink">Novas famílias · 30 dias</h3>
-          <span className="text-sm text-muted">{nf.format(signupsTotal)} no período</span>
+          <h3 className="font-display font-600 text-[16px] text-ink">New families · 30 days</h3>
+          <span className="text-sm text-muted">{nf.format(signupsTotal)} in period</span>
         </div>
         {signupsTotal === 0 ? (
-          <p className="text-sm text-muted mt-4">Nenhum cadastro novo nos últimos 30 dias. Quando chegarem, aparecem aqui dia a dia.</p>
+          <p className="text-sm text-muted mt-4">No new sign-ups in the last 30 days. When they arrive, they show up here day by day.</p>
         ) : (
           <Bars data={series} valueKey="signups" />
         )}
@@ -71,29 +71,29 @@ export default function Dashboard() {
       <Card className="p-5 mt-5">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-display font-600 text-[16px] text-ink">Eventos do app · 30 dias</h3>
-            <p className="text-[13px] text-muted mt-0.5">Uso real registrado pelo app (cliques, telas, ações).</p>
+            <h3 className="font-display font-600 text-[16px] text-ink">App events · 30 days</h3>
+            <p className="text-[13px] text-muted mt-0.5">Real usage logged by the app (taps, screens, actions).</p>
           </div>
           <Badge tone={eventsTotal > 0 ? 'green' : 'gray'}>
-            {eventsTotal > 0 ? `${nf.format(eventsTotal)} eventos` : 'aguardando o primeiro'}
+            {eventsTotal > 0 ? `${nf.format(eventsTotal)} events` : 'waiting for the first'}
           </Badge>
         </div>
 
         {eventsTotal === 0 ? (
           <div className="mt-4 rounded-xl bg-cream/60 border border-line p-4">
-            <div className="font-600 text-ink text-sm">O cano está pronto e vazio — do jeito honesto.</div>
+            <div className="font-600 text-ink text-sm">The pipe is ready and empty — the honest way.</div>
             <p className="text-sm text-muted mt-1.5">
-              A tabela de eventos e as métricas já existem. Os números começam a aparecer
-              assim que o app passar a registrar eventos. O próximo passo é colar o
+              The events table and metrics already exist. Numbers start appearing as soon
+              as the app logs events. Next step is to paste
               <code className="mx-1 px-1.5 py-0.5 rounded bg-ink/5 text-ink text-[12px]">track()</code>
-              no koddomo-app (ver <strong>TRACKING.md</strong>) — aí este painel preenche sozinho.
+              into koddomo-app (see <strong>TRACKING.md</strong>) — then this panel fills itself.
             </p>
           </div>
         ) : (
           <>
             <Bars data={series} valueKey="evts" className="mt-3" />
             <div className="mt-5">
-              <div className="text-[13px] font-600 text-ink mb-2">Eventos mais comuns</div>
+              <div className="text-[13px] font-600 text-ink mb-2">Most common events</div>
               <div className="space-y-1.5">
                 {breakdown.map((row) => (
                   <BreakdownBar key={row.name} name={row.name} n={Number(row.n)} max={Number(breakdown[0].n)} />
@@ -105,8 +105,8 @@ export default function Dashboard() {
       </Card>
 
       <p className="text-[12px] text-muted mt-5">
-        Atualizado em {ov?.generated_at ? new Date(ov.generated_at).toLocaleString('pt-BR') : '—'}.
-        Princípio Koddomo: nenhum dado inventado — preferimos um “zero” honesto a uma curva bonita e falsa.
+        Updated {ov?.generated_at ? new Date(ov.generated_at).toLocaleString('en-US') : '—'}.
+        Koddomo principle: no invented data — we prefer an honest “zero” to a pretty, fake curve.
       </p>
     </div>
   )
@@ -129,7 +129,7 @@ function Bars({ data, valueKey, className = '' }) {
   const bw = (W - gap * (n - 1)) / n
   return (
     <div className={`mt-3 overflow-x-auto ${className}`}>
-      <svg viewBox={`0 0 ${W} ${H + 18}`} className="w-full min-w-[520px]" role="img" aria-label="gráfico de barras">
+      <svg viewBox={`0 0 ${W} ${H + 18}`} className="w-full min-w-[520px]" role="img" aria-label="bar chart">
         {data.map((d, i) => {
           const v = Number(d[valueKey] || 0)
           const h = Math.round((v / max) * H)

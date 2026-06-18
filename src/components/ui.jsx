@@ -108,7 +108,7 @@ export function Modal({ open, onClose, title, children, footer, wide }) {
       <Card className={`relative w-full ${wide ? 'sm:max-w-2xl' : 'sm:max-w-lg'} max-h-[92vh] overflow-y-auto rounded-b-none sm:rounded-xl2`}>
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-line sticky top-0 bg-card rounded-t-xl2">
           <h3 className="font-display font-600 text-[17px] text-ink">{title}</h3>
-          <button onClick={onClose} className="text-muted hover:text-ink text-xl leading-none px-1" aria-label="Fechar">×</button>
+          <button onClick={onClose} className="text-muted hover:text-ink text-xl leading-none px-1" aria-label="Close">×</button>
         </div>
         <div className="px-5 py-4">{children}</div>
         {footer && <div className="flex justify-end gap-2 px-5 py-3.5 border-t border-line sticky bottom-0 bg-card">{footer}</div>}
@@ -133,7 +133,7 @@ export function Spinner({ label }) {
   return (
     <div className="flex items-center gap-3 text-muted text-sm py-10 justify-center">
       <span className="h-4 w-4 rounded-full border-2 border-teal/30 border-t-teal animate-spin" />
-      {label || 'Carregando…'}
+      {label || 'Loading…'}
     </div>
   )
 }

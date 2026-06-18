@@ -26,11 +26,11 @@ export default function App() {
   }, [session])
 
   if (session === undefined) {
-    return <div className="min-h-full grid place-items-center"><Spinner label="Carregando…" /></div>
+    return <div className="min-h-full grid place-items-center"><Spinner label="Loading…" /></div>
   }
   if (!session) return <Login />
   if (isAdmin === null) {
-    return <div className="min-h-full grid place-items-center"><Spinner label="Verificando acesso…" /></div>
+    return <div className="min-h-full grid place-items-center"><Spinner label="Checking access…" /></div>
   }
   if (!isAdmin) return <NoAccess email={session.user?.email} />
 
@@ -53,13 +53,13 @@ function NoAccess({ email }) {
     <div className="min-h-full grid place-items-center p-6">
       <Card className="max-w-sm w-full p-7 text-center">
         <div className="flex justify-center mb-3"><KodoMark size={36} /></div>
-        <h2 className="font-display font-600 text-[18px] text-ink">Sem acesso ao painel</h2>
+        <h2 className="font-display font-600 text-[18px] text-ink">No access</h2>
         <p className="text-sm text-muted mt-2">
-          A conta <strong>{email}</strong> está logada, mas não faz parte do time Koddomo.
-          Peça para te adicionarem como admin.
+          <strong>{email}</strong> is signed in, but it's not part of the Koddomo team.
+          Ask to be added as an admin.
         </p>
         <Button variant="outline" className="mt-4" onClick={() => supabase.auth.signOut()}>
-          Sair e usar outra conta
+          Sign out and use another account
         </Button>
       </Card>
     </div>

@@ -11,7 +11,7 @@ export default function Login() {
   async function signIn() {
     setBusy(true); setError('')
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
-    if (error) setError('E-mail ou senha incorretos. Tente novamente.')
+    if (error) setError('Wrong email or password. Please try again.')
     setBusy(false)
   }
 
@@ -25,14 +25,14 @@ export default function Login() {
         </div>
         <div>
           <h1 className="font-display font-700 text-4xl leading-tight max-w-sm">
-            Painel da equipe
+            Team console
           </h1>
           <p className="text-cream/80 mt-3 max-w-sm">
-            Gerencie novidades e o curso, e acompanhe estatísticas reais — só números
-            que de fato aconteceram.
+            Manage news and the course, and follow real stats — only numbers that
+            actually happened.
           </p>
         </div>
-        <p className="text-cream/60 text-sm">Acesso restrito ao time Koddomo.</p>
+        <p className="text-cream/60 text-sm">Access restricted to the Koddomo team.</p>
       </div>
 
       {/* Form side */}
@@ -42,19 +42,19 @@ export default function Login() {
             <KodoMark size={28} />
             <span className="font-display font-700 text-xl text-ink">Koddomo</span>
           </div>
-          <h2 className="font-display font-600 text-[20px] text-ink">Entrar no painel</h2>
-          <p className="text-sm text-muted mt-1 mb-5">Use a conta da equipe.</p>
+          <h2 className="font-display font-600 text-[20px] text-ink">Sign in</h2>
+          <p className="text-sm text-muted mt-1 mb-5">Use your team account.</p>
 
           <div className="space-y-3">
-            <Field label="E-mail">
+            <Field label="Email">
               <Input
                 type="email" autoComplete="email" value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && signIn()}
-                placeholder="voce@dizcharge.com"
+                placeholder="you@dizcharge.com"
               />
             </Field>
-            <Field label="Senha">
+            <Field label="Password">
               <Input
                 type="password" autoComplete="current-password" value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -66,7 +66,7 @@ export default function Login() {
             {error && <div className="text-sm text-danger bg-danger/10 rounded-lg px-3 py-2">{error}</div>}
 
             <Button className="w-full" onClick={signIn} disabled={busy || !email || !password}>
-              {busy ? 'Entrando…' : 'Entrar'}
+              {busy ? 'Signing in…' : 'Sign in'}
             </Button>
           </div>
         </Card>

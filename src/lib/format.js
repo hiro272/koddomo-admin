@@ -1,4 +1,4 @@
-export const nf = new Intl.NumberFormat('pt-BR')
+export const nf = new Intl.NumberFormat('en-US')
 
 export function money(cents) {
   return new Intl.NumberFormat('en-US', {
@@ -17,12 +17,12 @@ export function moneyExact(cents) {
 
 export function dateShort(d) {
   if (!d) return '—'
-  return new Date(d).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
+  return new Date(d).toLocaleDateString('en-US', { day: '2-digit', month: 'short' })
 }
 
 export function dateTime(d) {
   if (!d) return '—'
-  return new Date(d).toLocaleString('pt-BR', {
+  return new Date(d).toLocaleString('en-US', {
     day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit',
   })
 }

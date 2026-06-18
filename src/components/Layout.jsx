@@ -1,9 +1,9 @@
 import { Wordmark, Button } from './ui'
 
 const NAV = [
-  { key: 'dashboard', label: 'Painel', icon: GridIcon },
-  { key: 'news', label: 'Novidades', icon: NewsIcon },
-  { key: 'videos', label: 'Vídeos do curso', icon: PlayIcon },
+  { key: 'dashboard', label: 'Dashboard', icon: GridIcon },
+  { key: 'news', label: 'News', icon: NewsIcon },
+  { key: 'videos', label: 'Course videos', icon: PlayIcon },
 ]
 
 export default function Layout({ page, setPage, email, onSignOut, children }) {
@@ -11,7 +11,7 @@ export default function Layout({ page, setPage, email, onSignOut, children }) {
     <div className="min-h-full lg:grid lg:grid-cols-[244px_1fr]">
       {/* Sidebar (desktop) */}
       <aside className="hidden lg:flex flex-col bg-teal text-cream p-4 sticky top-0 h-screen">
-        <div className="px-2 py-2"><Wordmark subtitle="Painel da equipe" /></div>
+        <div className="px-2 py-2"><Wordmark subtitle="Team dashboard" /></div>
         <nav className="mt-4 space-y-1">
           {NAV.map(({ key, label, icon: Icon }) => (
             <button
@@ -27,7 +27,7 @@ export default function Layout({ page, setPage, email, onSignOut, children }) {
         <div className="mt-auto pt-4 border-t border-cream/15">
           <div className="text-[12px] text-cream/70 px-2 truncate">{email}</div>
           <button onClick={onSignOut} className="mt-2 w-full text-left text-[13px] text-cream/80 hover:text-cream px-2 py-1.5 rounded-lg hover:bg-cream/10">
-            Sair
+            Sign out
           </button>
         </div>
       </aside>
@@ -35,7 +35,7 @@ export default function Layout({ page, setPage, email, onSignOut, children }) {
       {/* Top bar (mobile) */}
       <header className="lg:hidden sticky top-0 z-30 bg-teal text-cream px-4 py-3 flex items-center justify-between">
         <Wordmark />
-        <button onClick={onSignOut} className="text-cream/85 text-sm">Sair</button>
+        <button onClick={onSignOut} className="text-cream/85 text-sm">Sign out</button>
       </header>
       <nav className="lg:hidden sticky top-[52px] z-20 bg-teal-dark text-cream flex">
         {NAV.map(({ key, label }) => (

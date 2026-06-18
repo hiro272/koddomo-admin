@@ -6,10 +6,10 @@ import {
 } from '../components/ui'
 
 const STATUS = {
-  free:    { label: 'Grátis',   tone: 'green' },
-  premium: { label: 'Premium',  tone: 'amber' },
-  soon:    { label: 'Em breve', tone: 'gray' },
-  hidden:  { label: 'Oculto',   tone: 'neutral' },
+  free:    { label: 'Free',        tone: 'green' },
+  premium: { label: 'Premium',     tone: 'amber' },
+  soon:    { label: 'Coming soon', tone: 'gray' },
+  hidden:  { label: 'Hidden',      tone: 'neutral' },
 }
 const blank = {
   title: '', description: '', status: 'soon',
@@ -29,7 +29,7 @@ export default function Videos() {
       .from('course_videos').select('*')
       .order('position', { ascending: true })
       .order('created_at', { ascending: true })
-    if (error) return flash('Não consegui carregar os vídeos.', 'error')
+    if (error) return flash("Couldn't load the videos.", 'error')
     setRows(data)
   }
 
@@ -49,33 +49,33 @@ export default function Videos() {
     } else {
       res = await supabase.from('course_videos').insert(base)
     }
-    if (res.error) return flash('Erro ao salvar. ' + res.error.message, 'error')
-    setEditing(null); flash(form.id ? 'Vídeo atualizado.' : 'Vídeo criado.'); load()
+    if (res.error) return flash('Error saving. ' + res.error.message, 'error')
+    setEditing(null); flash(form.id ? 'Video updated.' : 'Video created.'); load()
   }
 
   async function remove(row) {
     const { error } = await supabase.from('course_videos').delete().eq('id', row.id)
     setConfirmDel(null)
-    if (error) return flash('Não consegui excluir.', 'error')
-    flash('Vídeo excluído.'); load()
+    if (error) return flash("Couldn't delete.", 'error')
+    flash('Video deleted.'); load()
   }
 
   return (
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display font-700 text-[26px] text-ink leading-tight">Vídeos do curso</h1>
-          <p className="text-sm text-muted mt-1">Aulas exibidas no app. A ordem segue a posição.</p>
+          <h1 className="font-display font-700 text-[26px] text-ink leading-tight">Course videos</h1>
+          <p className="text-sm text-muted mt-1">Lessons shown in the app. Order follows the position.</p>
         </div>
-        <Button onClick={() => setEditing({ ...blank })}>+ Novo</Button>
+        <Button onClick={() => setEditing({ ...blank })}>+ New</Button>
       </div>
 
       <Card className="mt-4 overflow-hidden">
         {rows === null ? <Spinner /> :
           rows.length === 0 ? (
-            <Empty icon="🎬" title="Nenhum vídeo ainda"
-              action={<Button onClick={() => setEditing({ ...blank })}>Adicionar o primeiro</Button>}>
-              Cadastre a primeira aula do curso.
+            <Empty icon="🎬" title="No videos yet"
+              action={<Button onClick={() => setEditing({ ...blank })}>Add the first</Button>}>
+              Add the first course lesson.
             </Empty>
           ) : (
             <ul className="divide-y divide-line">
@@ -86,17 +86,17 @@ export default function Videos() {
                     <div className="w-7 shrink-0 text-center font-display font-600 text-muted pt-0.5">{i + 1}</div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-600 text-ink truncate">{r.title || '(sem título)'}</span>
+                        <span className="font-600 text-ink truncate">{r.title || '(untitled)'}</span>
                         <Badge tone={st.tone}>{st.label}</Badge>
                         {r.duration && <Badge>{r.duration}</Badge>}
-                        {!r.video_file && r.status !== 'soon' && <Badge tone="red">sem arquivo</Badge>}
+                        {!r.video_file && r.status !== 'soon' && <Badge tone="red">no file</Badge>}
                       </div>
                       {r.description && <p className="text-[13px] text-muted mt-1 line-clamp-2">{r.description}</p>}
-                      <p className="text-[12px] text-muted mt-1">pos {r.position} · atualizado {dateTime(r.updated_at)}</p>
+                      <p className="text-[12px] text-muted mt-1">pos {r.position} · updated {dateTime(r.updated_at)}</p>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
-                      <Button variant="outline" onClick={() => setEditing(r)}>Editar</Button>
-                      <Button variant="ghost" className="text-danger" onClick={() => setConfirmDel(r)}>Excluir</Button>
+                      <Button variant="outline" onClick={() => setEditing(r)}>Edit</Button>
+                      <Button variant="ghost" className="text-danger" onClick={() => setConfirmDel(r)}>Delete</Button>
                     </div>
                   </li>
                 )
@@ -107,12 +107,12 @@ export default function Videos() {
 
       <VideoForm editing={editing} onClose={() => setEditing(null)} onSave={save} />
 
-      <Modal open={!!confirmDel} onClose={() => setConfirmDel(null)} title="Excluir vídeo"
+      <Modal open={!!confirmDel} onClose={() => setConfirmDel(null)} title="Delete video"
         footer={<>
-          <Button variant="outline" onClick={() => setConfirmDel(null)}>Cancelar</Button>
-          <Button variant="danger" onClick={() => remove(confirmDel)}>Excluir</Button>
+          <Button variant="outline" onClick={() => setConfirmDel(null)}>Cancel</Button>
+          <Button variant="danger" onClick={() => remove(confirmDel)}>Delete</Button>
         </>}>
-        <p className="text-sm text-ink">Excluir “{confirmDel?.title}”? Isso não pode ser desfeito.</p>
+        <p className="text-sm text-ink">Delete “{confirmDel?.title}”? This can't be undone.</p>
       </Modal>
 
       <Toast toast={toast} />
@@ -127,27 +127,27 @@ function VideoForm({ editing, onClose, onSave }) {
 
   return (
     <Modal open={!!editing} onClose={onClose} wide
-      title={editing?.id ? 'Editar vídeo' : 'Novo vídeo'}
+      title={editing?.id ? 'Edit video' : 'New video'}
       footer={<>
-        <Button variant="outline" onClick={onClose}>Cancelar</Button>
-        <Button onClick={() => onSave(f)} disabled={!f.title.trim()}>Salvar</Button>
+        <Button variant="outline" onClick={onClose}>Cancel</Button>
+        <Button onClick={() => onSave(f)} disabled={!f.title.trim()}>Save</Button>
       </>}>
       <div className="space-y-3">
-        <Field label="Título"><Input value={f.title} onChange={set('title')} placeholder="Ex.: O que é valor de mercado?" /></Field>
-        <Field label="Descrição"><Textarea value={f.description} onChange={set('description')} placeholder="Resumo da aula…" /></Field>
+        <Field label="Title"><Input value={f.title} onChange={set('title')} placeholder="e.g. What is market value?" /></Field>
+        <Field label="Description"><Textarea value={f.description} onChange={set('description')} placeholder="Lesson summary…" /></Field>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Status">
             <Select value={f.status} onChange={set('status')}>
-              <option value="free">Grátis</option>
+              <option value="free">Free</option>
               <option value="premium">Premium</option>
-              <option value="soon">Em breve</option>
-              <option value="hidden">Oculto</option>
+              <option value="soon">Coming soon</option>
+              <option value="hidden">Hidden</option>
             </Select>
           </Field>
-          <Field label="Duração" hint="Ex.: 4:32"><Input value={f.duration || ''} onChange={set('duration')} /></Field>
-          <Field label="Arquivo do vídeo" hint="Caminho/nome no storage"><Input value={f.video_file || ''} onChange={set('video_file')} placeholder="aula-01.mp4" /></Field>
-          <Field label="Capa (poster)" hint="Caminho/nome da imagem"><Input value={f.poster_file || ''} onChange={set('poster_file')} placeholder="aula-01.jpg" /></Field>
-          <Field label="Posição" hint="Menor aparece primeiro"><Input type="number" value={f.position} onChange={set('position')} /></Field>
+          <Field label="Duration" hint="e.g. 4:32"><Input value={f.duration || ''} onChange={set('duration')} /></Field>
+          <Field label="Video file" hint="Path/name in storage"><Input value={f.video_file || ''} onChange={set('video_file')} placeholder="lesson-01.mp4" /></Field>
+          <Field label="Poster" hint="Image path/name"><Input value={f.poster_file || ''} onChange={set('poster_file')} placeholder="lesson-01.jpg" /></Field>
+          <Field label="Position" hint="Lower shows first"><Input type="number" value={f.position} onChange={set('position')} /></Field>
         </div>
       </div>
     </Modal>
