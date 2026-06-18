@@ -4,12 +4,20 @@ import { useEffect } from 'react'
 export function KodoMark({ size = 28 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 48 48" fill="none" aria-hidden="true">
-      <path d="M9 8l9 7c3.8-1.3 8.2-1.3 12 0l9-7-1.5 12.5C39 27 32.4 33 24 33S9 27 7.5 20.5L9 8z" fill="#E0922F"/>
-      <path d="M9 8l9 7-3.2 2.2L9 8z" fill="#0E6E63"/>
-      <path d="M39 8l-9 7 3.2 2.2L39 8z" fill="#0E6E63"/>
-      <circle cx="18.5" cy="21" r="1.8" fill="#16302C"/>
-      <circle cx="29.5" cy="21" r="1.8" fill="#16302C"/>
-      <path d="M24 25.5c-1.6 0-2.8 1-2.8 2.2 0 1.3 1.4 2.3 2.8 2.3s2.8-1 2.8-2.3c0-1.2-1.2-2.2-2.8-2.2z" fill="#16302C"/>
+      {/* ears */}
+      <path d="M9 5 L19.5 16 L7 18 Z" fill="#E0922F" />
+      <path d="M39 5 L28.5 16 L41 18 Z" fill="#E0922F" />
+      <path d="M11 8.5 L16 15 L9.8 16 Z" fill="#FBE0BC" />
+      <path d="M37 8.5 L32 15 L38.2 16 Z" fill="#FBE0BC" />
+      {/* head */}
+      <circle cx="24" cy="27" r="14" fill="#E0922F" />
+      {/* white muzzle / cheeks */}
+      <path d="M13 27c0 9 5 14 11 14s11-5 11-14c-4 3-8 4-11 4s-7-1-11-4z" fill="#FBF6EC" />
+      {/* eyes */}
+      <circle cx="18" cy="25" r="2.1" fill="#16302C" />
+      <circle cx="30" cy="25" r="2.1" fill="#16302C" />
+      {/* nose */}
+      <path d="M24 30.8 l-2.6 2.3 h5.2 Z" fill="#16302C" />
     </svg>
   )
 }
