@@ -53,12 +53,19 @@ export function Card({ className = '', ...p }) {
   return <div className={`bg-card border border-line rounded-xl2 shadow-card ${className}`} {...p} />
 }
 
-export function StatCard({ label, value, sub, accent = 'teal' }) {
+export function StatCard({ label, value, sub, accent = 'teal', onClick }) {
   const bar = { teal: 'bg-teal', amber: 'bg-amber', soft: 'bg-teal-soft', danger: 'bg-danger' }[accent]
+  const clickable = typeof onClick === 'function'
   return (
-    <Card className="p-4 relative overflow-hidden">
+    <Card
+      onClick={onClick}
+      className={`p-4 relative overflow-hidden ${clickable ? 'cursor-pointer hover:shadow-[0_8px_26px_-14px_rgba(22,48,44,.35)] hover:-translate-y-0.5 transition' : ''}`}
+    >
       <div className={`absolute left-0 top-0 h-full w-1 ${bar}`} />
-      <div className="text-[12px] uppercase tracking-wide text-muted font-600">{label}</div>
+      <div className="flex items-center justify-between">
+        <div className="text-[12px] uppercase tracking-wide text-muted font-600">{label}</div>
+        {clickable && <span className="text-teal text-sm leading-none">›</span>}
+      </div>
       <div className="font-display font-700 text-[26px] text-ink mt-1 leading-none">{value}</div>
       {sub && <div className="text-[12px] text-muted mt-1.5">{sub}</div>}
     </Card>

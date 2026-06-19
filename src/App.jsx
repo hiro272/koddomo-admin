@@ -3,6 +3,7 @@ import { supabase } from './lib/supabase'
 import Login from './components/Login'
 import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
+import Families from './pages/Families'
 import News from './pages/News'
 import Videos from './pages/Videos'
 import { Button, Card, KodoMark, Spinner } from './components/ui'
@@ -41,7 +42,8 @@ export default function App() {
       email={session.user?.email}
       onSignOut={() => supabase.auth.signOut()}
     >
-      {page === 'dashboard' && <Dashboard />}
+      {page === 'dashboard' && <Dashboard onNavigate={setPage} />}
+      {page === 'families' && <Families />}
       {page === 'news' && <News />}
       {page === 'videos' && <Videos />}
     </Layout>

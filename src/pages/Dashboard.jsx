@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase'
 import { money, nf, dateShort } from '../lib/format'
 import { Card, StatCard, Spinner, Empty, Badge } from '../components/ui'
 
-export default function Dashboard() {
+export default function Dashboard({ onNavigate }) {
   const [ov, setOv] = useState(null)
   const [series, setSeries] = useState([])
   const [breakdown, setBreakdown] = useState([])
@@ -41,7 +41,7 @@ export default function Dashboard() {
 
       {/* Platform KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
-        <StatCard label="Families" value={nf.format(ov.families)} sub={`${nf.format(ov.signups_7d)} new in 7 days`} />
+        <StatCard label="Families" value={nf.format(ov.families)} sub={`${nf.format(ov.signups_7d)} new in 7 days · view all ›`} onClick={() => onNavigate?.('families')} />
         <StatCard label="Kids" value={nf.format(ov.kids)} sub={`${nf.format(ov.parents)} parents`} accent="soft" />
         <StatCard label="Subscribers" value={nf.format(ov.paid_families)} sub={`of ${nf.format(ov.families)} families`} accent="amber" />
         <StatCard label="Pending requests" value={nf.format(ov.requests_pending)} sub="awaiting approval" accent={ov.requests_pending > 0 ? 'danger' : 'teal'} />

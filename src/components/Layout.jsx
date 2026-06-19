@@ -2,6 +2,7 @@ import { Wordmark, Button } from './ui'
 
 const NAV = [
   { key: 'dashboard', label: 'Dashboard', icon: GridIcon },
+  { key: 'families', label: 'Families', icon: UsersIcon },
   { key: 'news', label: 'News', icon: NewsIcon },
   { key: 'videos', label: 'Course videos', icon: PlayIcon },
 ]
@@ -63,4 +64,7 @@ function NewsIcon() {
 }
 function PlayIcon() {
   return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" strokeWidth="2"/><path d="M11 9.5l4 2.5-4 2.5v-5z" fill="currentColor"/></svg>
+}
+function UsersIcon() {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" strokeWidth="2"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M16 5.2a3.2 3.2 0 010 5.6M17.5 19c0-2.2-1-4-2.6-4.6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
 }
