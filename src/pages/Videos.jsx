@@ -16,6 +16,51 @@ const blank = {
   video_file: '', poster_file: '', duration: '', position: 0, in_discover: false,
 }
 
+// Upload a file to the public "discover" bucket and return its URL.
+async function uploadToDiscover(file, prefix) {
+  const ext = (file.name.split('.').pop() || 'bin').toLowerCase()
+  const path = `${prefix}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`
+  const { error } = await supabase.storage.from('discover').upload(path, file, { contentType: file.type })
+  if (error) throw error
+  return supabase.storage.from('discover').getPublicUrl(path).data.publicUrl
+}
+
+// One-click uploader with preview (image) or "uploaded" chip (video) + replace/remove.
+function Uploader({ value, onChange, accept, prefix, kind }) {
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState(null)
+  async function pick(e) {
+    const file = e.target.files?.[0]; if (!file) return
+    setErr(null); setBusy(true)
+    try { onChange(await uploadToDiscover(file, prefix)) }
+    catch { setErr('Upload failed. The file may be too large.') }
+    finally { setBusy(false); e.target.value = '' }
+  }
+  const btn = busy ? 'Uploading…' : (kind === 'image' ? 'Upload poster' : 'Upload video')
+  return (
+    <div>
+      {value ? (
+        <div className="flex items-center gap-2 flex-wrap">
+          {kind === 'image'
+            ? <img src={value} alt="" className="w-12 h-12 rounded-lg object-cover border border-line" />
+            : <span className="text-[12px] px-2 py-1 rounded-md bg-cream text-ink border border-line">✓ uploaded</span>}
+          <label className="text-[13px] px-3 py-1.5 rounded-lg border border-line text-ink hover:bg-cream/50 cursor-pointer">
+            {busy ? 'Uploading…' : 'Replace'}
+            <input type="file" accept={accept} className="hidden" onChange={pick} disabled={busy} />
+          </label>
+          <Button variant="ghost" className="text-danger" onClick={() => onChange('')}>Remove</Button>
+        </div>
+      ) : (
+        <label className="inline-flex items-center gap-2 cursor-pointer">
+          <span className="text-[13px] px-3 py-1.5 rounded-lg border border-line text-ink hover:bg-cream/50">{btn}</span>
+          <input type="file" accept={accept} className="hidden" onChange={pick} disabled={busy} />
+        </label>
+      )}
+      {err && <div className="text-[12px] text-danger mt-1">{err}</div>}
+    </div>
+  )
+}
+
 export default function Videos() {
   const [rows, setRows] = useState(null)
   const [editing, setEditing] = useState(null)
@@ -146,8 +191,8 @@ function VideoForm({ editing, onClose, onSave }) {
             </Select>
           </Field>
           <Field label="Duration" hint="e.g. 4:32"><Input value={f.duration || ''} onChange={set('duration')} /></Field>
-          <Field label="Video file" hint="Path/name in storage"><Input value={f.video_file || ''} onChange={set('video_file')} placeholder="lesson-01.mp4" /></Field>
-          <Field label="Poster" hint="Image path/name"><Input value={f.poster_file || ''} onChange={set('poster_file')} placeholder="lesson-01.jpg" /></Field>
+          <Field label="Video file" hint="MP4 — keep it short & small"><Uploader value={f.video_file} onChange={(url) => setF((s) => ({ ...s, video_file: url }))} accept="video/*" prefix="video" kind="video" /></Field>
+          <Field label="Poster" hint="Cover image (optional)"><Uploader value={f.poster_file} onChange={(url) => setF((s) => ({ ...s, poster_file: url }))} accept="image/*" prefix="poster" kind="image" /></Field>
           <Field label="Position" hint="Lower shows first"><Input type="number" value={f.position} onChange={set('position')} /></Field>
           <Field label="Show in Discover?" hint="Also feature this video in the kids' Discover feed">
             <Select value={f.in_discover ? 'yes' : 'no'} onChange={(e) => setF((s) => ({ ...s, in_discover: e.target.value === 'yes' }))}>
