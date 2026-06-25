@@ -12,6 +12,46 @@ const TAGS = [
   ['toys', 'Collectible toys'], ['sports', 'Sports cards'],
 ]
 
+// Upload an image to the public "discover" bucket and return its URL.
+async function uploadImage(file) {
+  const ext = (file.name.split('.').pop() || 'jpg').toLowerCase()
+  const path = `quiz/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`
+  const { error } = await supabase.storage.from('discover').upload(path, file, { contentType: file.type })
+  if (error) throw error
+  return supabase.storage.from('discover').getPublicUrl(path).data.publicUrl
+}
+
+// Small "Upload photo" control with preview + remove. Falls back to the icon when empty.
+function ImageField({ value, onChange }) {
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState(null)
+  async function pick(e) {
+    const file = e.target.files?.[0]; if (!file) return
+    setErr(null); setBusy(true)
+    try { onChange(await uploadImage(file)) }
+    catch { setErr('Upload failed. Try again.') }
+    finally { setBusy(false); e.target.value = '' }
+  }
+  return (
+    <div>
+      {value ? (
+        <div className="flex items-center gap-2">
+          <img src={value} alt="" className="w-12 h-12 rounded-lg object-cover border border-line" />
+          <Button variant="ghost" className="text-danger" onClick={() => onChange('')}>Remove</Button>
+        </div>
+      ) : (
+        <label className="inline-flex items-center gap-2 cursor-pointer">
+          <span className="text-[13px] px-3 py-1.5 rounded-lg border border-line text-ink hover:bg-cream/50">
+            {busy ? 'Uploading…' : 'Upload photo'}
+          </span>
+          <input type="file" accept="image/*" className="hidden" onChange={pick} disabled={busy} />
+        </label>
+      )}
+      {err && <div className="text-[12px] text-danger mt-1">{err}</div>}
+    </div>
+  )
+}
+
 // Icon names the kid app knows how to draw (tap-the-picture options).
 const ICON_HINT = 'Sparkles, Layers, ShieldCheck, Trophy, Gem, Star, Coins, TrendingUp'
 
@@ -19,8 +59,8 @@ const ICON_HINT = 'Sparkles, Layers, ShieldCheck, Trophy, Gem, Star, Coins, Tren
 const blank = {
   question: '', audience: 'kids', tag: 'general', explain: '',
   status: 'draft', position: 0,
-  a_label: '', a_icon: 'Sparkles', a_color: '#E0922F',
-  b_label: '', b_icon: 'Layers', b_color: '#2E9E83',
+  a_label: '', a_icon: 'Sparkles', a_color: '#E0922F', a_image: '',
+  b_label: '', b_icon: 'Layers', b_color: '#2E9E83', b_image: '',
   correct: 'a',
 }
 
@@ -29,15 +69,15 @@ function rowToForm(r) {
   const a = opts[0] || {}, b = opts[1] || {}
   return {
     ...blank, ...r,
-    a_label: a.label || '', a_icon: a.icon || 'Sparkles', a_color: a.color || '#E0922F',
-    b_label: b.label || '', b_icon: b.icon || 'Layers', b_color: b.color || '#2E9E83',
+    a_label: a.label || '', a_icon: a.icon || 'Sparkles', a_color: a.color || '#E0922F', a_image: a.image || '',
+    b_label: b.label || '', b_icon: b.icon || 'Layers', b_color: b.color || '#2E9E83', b_image: b.image || '',
     correct: b.correct ? 'b' : 'a',
   }
 }
 function formToOptions(f) {
   return [
-    { label: f.a_label, icon: f.a_icon, color: f.a_color, correct: f.correct === 'a' },
-    { label: f.b_label, icon: f.b_icon, color: f.b_color, correct: f.correct === 'b' },
+    { label: f.a_label, icon: f.a_icon, color: f.a_color, image: f.a_image || null, correct: f.correct === 'a' },
+    { label: f.b_label, icon: f.b_icon, color: f.b_color, image: f.b_image || null, correct: f.correct === 'b' },
   ]
 }
 
@@ -189,6 +229,9 @@ function QuizForm({ editing, onClose, onSave }) {
           <div className="rounded-xl border border-line p-3 space-y-2">
             <div className="text-[12px] font-700 text-muted">Option A</div>
             <Field label="Label"><Input value={f.a_label} onChange={set('a_label')} placeholder="e.g. Shiny holo" /></Field>
+            <Field label="Photo (optional)" hint="Shown instead of the icon">
+              <ImageField value={f.a_image} onChange={(url) => setF((s) => ({ ...s, a_image: url }))} />
+            </Field>
             <Field label="Icon" hint={ICON_HINT}><Input value={f.a_icon} onChange={set('a_icon')} /></Field>
             <Field label="Color" hint="e.g. #E0922F"><Input value={f.a_color} onChange={set('a_color')} /></Field>
           </div>
@@ -196,6 +239,9 @@ function QuizForm({ editing, onClose, onSave }) {
           <div className="rounded-xl border border-line p-3 space-y-2">
             <div className="text-[12px] font-700 text-muted">Option B</div>
             <Field label="Label"><Input value={f.b_label} onChange={set('b_label')} placeholder="e.g. Plain card" /></Field>
+            <Field label="Photo (optional)" hint="Shown instead of the icon">
+              <ImageField value={f.b_image} onChange={(url) => setF((s) => ({ ...s, b_image: url }))} />
+            </Field>
             <Field label="Icon" hint={ICON_HINT}><Input value={f.b_icon} onChange={set('b_icon')} /></Field>
             <Field label="Color" hint="e.g. #2E9E83"><Input value={f.b_color} onChange={set('b_color')} /></Field>
           </div>
