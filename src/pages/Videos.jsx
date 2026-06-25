@@ -13,7 +13,7 @@ const STATUS = {
 }
 const blank = {
   title: '', description: '', status: 'soon',
-  video_file: '', poster_file: '', duration: '', position: 0,
+  video_file: '', poster_file: '', duration: '', position: 0, in_discover: false,
 }
 
 export default function Videos() {
@@ -40,6 +40,7 @@ export default function Videos() {
       video_file: form.video_file || null,
       poster_file: form.poster_file || null,
       duration: form.duration || null,
+      in_discover: !!form.in_discover,
     }
     let res
     if (form.id) {
@@ -148,6 +149,12 @@ function VideoForm({ editing, onClose, onSave }) {
           <Field label="Video file" hint="Path/name in storage"><Input value={f.video_file || ''} onChange={set('video_file')} placeholder="lesson-01.mp4" /></Field>
           <Field label="Poster" hint="Image path/name"><Input value={f.poster_file || ''} onChange={set('poster_file')} placeholder="lesson-01.jpg" /></Field>
           <Field label="Position" hint="Lower shows first"><Input type="number" value={f.position} onChange={set('position')} /></Field>
+          <Field label="Show in Discover?" hint="Also feature this video in the kids' Discover feed">
+            <Select value={f.in_discover ? 'yes' : 'no'} onChange={(e) => setF((s) => ({ ...s, in_discover: e.target.value === 'yes' }))}>
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </Select>
+          </Field>
         </div>
       </div>
     </Modal>

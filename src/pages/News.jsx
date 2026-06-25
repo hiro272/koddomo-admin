@@ -8,7 +8,7 @@ import {
 const AUDIENCE = { parents: 'Parents', kids: 'Kids', both: 'Both' }
 const blank = {
   title: '', body: '', audience: 'parents', tag: 'product',
-  kind: 'Update', icon: 'Newspaper', accent: '', status: 'draft', position: 0,
+  kind: 'Update', icon: 'Newspaper', accent: '', image_url: '', status: 'draft', position: 0,
 }
 
 export default function News() {
@@ -31,7 +31,7 @@ export default function News() {
   }
 
   async function save(form) {
-    const payload = { ...form, position: Number(form.position) || 0, accent: form.accent || null }
+    const payload = { ...form, position: Number(form.position) || 0, accent: form.accent || null, image_url: form.image_url || null }
     let res
     if (form.id) {
       const patch = { ...payload, updated_at: new Date().toISOString() }
@@ -161,6 +161,7 @@ function NewsForm({ editing, onClose, onSave }) {
           <Field label="Position" hint="Lower shows first"><Input type="number" value={f.position} onChange={set('position')} /></Field>
         </div>
         <Field label="Accent color" hint="Optional. e.g. #E0922F"><Input value={f.accent || ''} onChange={set('accent')} placeholder="#E0922F" /></Field>
+        <Field label="Photo URL" hint="Optional. For the Discover photo card. Leave blank to use the icon."><Input value={f.image_url || ''} onChange={set('image_url')} placeholder="https://…/photo.jpg" /></Field>
         {f.id && f.published_at && <p className="text-[12px] text-muted">Published on {dateTime(f.published_at)}.</p>}
       </div>
     </Modal>
