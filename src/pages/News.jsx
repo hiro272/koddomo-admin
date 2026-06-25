@@ -16,6 +16,46 @@ const TAGS = [
   ['toys', 'Collectible toys'], ['sports', 'Sports cards'],
 ]
 
+// Upload an image to the public "discover" bucket and return its URL.
+async function uploadImage(file) {
+  const ext = (file.name.split('.').pop() || 'jpg').toLowerCase()
+  const path = `news/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`
+  const { error } = await supabase.storage.from('discover').upload(path, file, { contentType: file.type })
+  if (error) throw error
+  return supabase.storage.from('discover').getPublicUrl(path).data.publicUrl
+}
+function ImageField({ value, onChange }) {
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState(null)
+  async function pick(e) {
+    const file = e.target.files?.[0]; if (!file) return
+    setErr(null); setBusy(true)
+    try { onChange(await uploadImage(file)) }
+    catch { setErr('Upload failed. The file may be too large.') }
+    finally { setBusy(false); e.target.value = '' }
+  }
+  return (
+    <div>
+      {value ? (
+        <div className="flex items-center gap-2 flex-wrap">
+          <img src={value} alt="" className="w-20 h-12 rounded-lg object-cover border border-line" />
+          <label className="text-[13px] px-3 py-1.5 rounded-lg border border-line text-ink hover:bg-cream/50 cursor-pointer">
+            {busy ? 'Uploading…' : 'Replace'}
+            <input type="file" accept="image/*" className="hidden" onChange={pick} disabled={busy} />
+          </label>
+          <Button variant="ghost" className="text-danger" onClick={() => onChange('')}>Remove</Button>
+        </div>
+      ) : (
+        <label className="inline-flex items-center gap-2 cursor-pointer">
+          <span className="text-[13px] px-3 py-1.5 rounded-lg border border-line text-ink hover:bg-cream/50">{busy ? 'Uploading…' : 'Upload photo'}</span>
+          <input type="file" accept="image/*" className="hidden" onChange={pick} disabled={busy} />
+        </label>
+      )}
+      {err && <div className="text-[12px] text-danger mt-1">{err}</div>}
+    </div>
+  )
+}
+
 export default function News() {
   const [rows, setRows] = useState(null)
   const [editing, setEditing] = useState(null)
@@ -170,7 +210,9 @@ function NewsForm({ editing, onClose, onSave }) {
           <Field label="Position" hint="Lower shows first"><Input type="number" value={f.position} onChange={set('position')} /></Field>
         </div>
         <Field label="Accent color" hint="Optional. e.g. #E0922F"><Input value={f.accent || ''} onChange={set('accent')} placeholder="#E0922F" /></Field>
-        <Field label="Photo URL" hint="Optional. For the Discover photo card. Leave blank to use the icon."><Input value={f.image_url || ''} onChange={set('image_url')} placeholder="https://…/photo.jpg" /></Field>
+        <Field label="Photo" hint="Optional. Shown on the kids' card. Leave blank to use the icon.">
+          <ImageField value={f.image_url} onChange={(url) => setF((s) => ({ ...s, image_url: url }))} />
+        </Field>
         {f.id && f.published_at && <p className="text-[12px] text-muted">Published on {dateTime(f.published_at)}.</p>}
       </div>
     </Modal>
