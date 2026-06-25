@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard'
 import Families from './pages/Families'
 import News from './pages/News'
 import Videos from './pages/Videos'
+import Quizzes from './pages/Quizzes'
 import { Button, Card, KodoMark, Spinner } from './components/ui'
 
 export default function App() {
@@ -46,6 +47,7 @@ export default function App() {
       {page === 'families' && <Families />}
       {page === 'news' && <News />}
       {page === 'videos' && <Videos />}
+      {page === 'quizzes' && <Quizzes />}
     </Layout>
   )
 }
