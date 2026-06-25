@@ -6,13 +6,18 @@ import {
 } from '../components/ui'
 
 const AUDIENCE = { kids: 'Kids', both: 'Both', parents: 'Parents' }
+const TAGS = [
+  ['general', 'General (everyone)'],
+  ['pokemon', 'Pokémon'], ['lego', 'LEGO'], ['games', 'Video games'],
+  ['toys', 'Collectible toys'], ['sports', 'Sports cards'],
+]
 
 // Icon names the kid app knows how to draw (tap-the-picture options).
 const ICON_HINT = 'Sparkles, Layers, ShieldCheck, Trophy, Gem, Star, Coins, TrendingUp'
 
 // The form is flat (easy to fill); we pack/unpack the two options into JSONB.
 const blank = {
-  question: '', audience: 'kids', tag: 'quiz', explain: '',
+  question: '', audience: 'kids', tag: 'general', explain: '',
   status: 'draft', position: 0,
   a_label: '', a_icon: 'Sparkles', a_color: '#E0922F',
   b_label: '', b_icon: 'Layers', b_color: '#2E9E83',
@@ -223,7 +228,11 @@ function QuizForm({ editing, onClose, onSave }) {
               <option value="published">Live</option>
             </Select>
           </Field>
-          <Field label="Tag" hint="e.g. quiz, care, value"><Input value={f.tag} onChange={set('tag')} /></Field>
+          <Field label="Hobby tag" hint="General = everyone; a hobby = only kids who follow it">
+            <Select value={TAGS.some(([v]) => v === f.tag) ? f.tag : 'general'} onChange={set('tag')}>
+              {TAGS.map(([v, lab]) => <option key={v} value={v}>{lab}</option>)}
+            </Select>
+          </Field>
           <Field label="Position" hint="Lower shows first"><Input type="number" value={f.position} onChange={set('position')} /></Field>
         </div>
         {f.id && f.published_at && <p className="text-[12px] text-muted">Published on {dateTime(f.published_at)}.</p>}

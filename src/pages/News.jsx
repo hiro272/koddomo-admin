@@ -7,9 +7,14 @@ import {
 
 const AUDIENCE = { parents: 'Parents', kids: 'Kids', both: 'Both' }
 const blank = {
-  title: '', body: '', audience: 'parents', tag: 'product',
+  title: '', body: '', audience: 'parents', tag: 'general',
   kind: 'Update', icon: 'Newspaper', accent: '', image_url: '', status: 'draft', position: 0,
 }
+const TAGS = [
+  ['general', 'General (everyone)'],
+  ['pokemon', 'Pokémon'], ['lego', 'LEGO'], ['games', 'Video games'],
+  ['toys', 'Collectible toys'], ['sports', 'Sports cards'],
+]
 
 export default function News() {
   const [rows, setRows] = useState(null)
@@ -155,7 +160,11 @@ function NewsForm({ editing, onClose, onSave }) {
               <option value="published">Live</option>
             </Select>
           </Field>
-          <Field label="Tag" hint="e.g. product, market, tip"><Input value={f.tag} onChange={set('tag')} /></Field>
+          <Field label="Hobby tag" hint="General = everyone; a hobby = only kids/parents who follow it">
+            <Select value={TAGS.some(([v]) => v === f.tag) ? f.tag : 'general'} onChange={set('tag')}>
+              {TAGS.map(([v, lab]) => <option key={v} value={v}>{lab}</option>)}
+            </Select>
+          </Field>
           <Field label="Type (kind)" hint="e.g. Update, News"><Input value={f.kind} onChange={set('kind')} /></Field>
           <Field label="Icon" hint="Icon name the app uses (e.g. Newspaper)"><Input value={f.icon} onChange={set('icon')} /></Field>
           <Field label="Position" hint="Lower shows first"><Input type="number" value={f.position} onChange={set('position')} /></Field>
