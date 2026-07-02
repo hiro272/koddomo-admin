@@ -4,7 +4,8 @@ const NAV = [
   { key: 'dashboard', label: 'Dashboard', icon: GridIcon },
   { key: 'families', label: 'Families', icon: UsersIcon },
   { key: 'feed', label: 'Feed', icon: FeedIcon },
-  { key: 'community', label: 'Community', icon: ShieldIcon },
+  { key: 'communities', label: 'Communities', icon: GroupIcon },
+  { key: 'community', label: 'Moderation', icon: ShieldIcon },
 ]
 
 export default function Layout({ page, setPage, email, onSignOut, children }) {
@@ -58,6 +59,9 @@ export default function Layout({ page, setPage, email, onSignOut, children }) {
 
 function GridIcon() {
   return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="2"/></svg>
+}
+function GroupIcon() {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" strokeWidth="2"/><path d="M4 19c0-2.8 2.2-5 5-5s5 2.2 5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M16 11a3 3 0 1 0-1-5.8M20 19c0-2.2-1.4-4-3.4-4.7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
 }
 function ShieldIcon() {
   return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
