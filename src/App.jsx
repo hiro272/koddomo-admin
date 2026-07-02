@@ -5,6 +5,7 @@ import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
 import Families from './pages/Families'
 import Feed from './pages/Feed'
+import Community from './pages/Community'
 import { Button, Card, KodoMark, Spinner } from './components/ui'
 
 export default function App() {
@@ -44,6 +45,7 @@ export default function App() {
       {page === 'dashboard' && <Dashboard onNavigate={setPage} />}
       {page === 'families' && <Families />}
       {page === 'feed' && <Feed />}
+      {page === 'community' && <Community />}
     </Layout>
   )
 }
