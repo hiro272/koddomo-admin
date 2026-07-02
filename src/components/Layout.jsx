@@ -3,9 +3,7 @@ import { Wordmark, Button } from './ui'
 const NAV = [
   { key: 'dashboard', label: 'Dashboard', icon: GridIcon },
   { key: 'families', label: 'Families', icon: UsersIcon },
-  { key: 'news', label: 'News', icon: NewsIcon },
-  { key: 'videos', label: 'Course videos', icon: PlayIcon },
-  { key: 'quizzes', label: 'Quizzes', icon: QuizIcon },
+  { key: 'feed', label: 'Feed', icon: FeedIcon },
 ]
 
 export default function Layout({ page, setPage, email, onSignOut, children }) {
@@ -59,6 +57,9 @@ export default function Layout({ page, setPage, email, onSignOut, children }) {
 
 function GridIcon() {
   return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="2"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="2"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="2"/></svg>
+}
+function FeedIcon() {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="2"/><path d="M7 8h6M7 12h10M7 16h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><circle cx="17.5" cy="8" r="1.4" fill="currentColor"/></svg>
 }
 function NewsIcon() {
   return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="2"/><path d="M7 8h7M7 12h10M7 16h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
