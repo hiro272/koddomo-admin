@@ -4,9 +4,7 @@ import Login from './components/Login'
 import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
 import Families from './pages/Families'
-import News from './pages/News'
-import Videos from './pages/Videos'
-import Quizzes from './pages/Quizzes'
+import Feed from './pages/Feed'
 import { Button, Card, KodoMark, Spinner } from './components/ui'
 
 export default function App() {
@@ -45,9 +43,7 @@ export default function App() {
     >
       {page === 'dashboard' && <Dashboard onNavigate={setPage} />}
       {page === 'families' && <Families />}
-      {page === 'news' && <News />}
-      {page === 'videos' && <Videos />}
-      {page === 'quizzes' && <Quizzes />}
+      {page === 'feed' && <Feed />}
     </Layout>
   )
 }
