@@ -4,6 +4,7 @@ import Login from './components/Login'
 import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
 import Families from './pages/Families'
+import Goals from './pages/Goals'
 import Feed from './pages/Feed'
 import Community from './pages/Community'
 import Communities from './pages/Communities'
@@ -45,6 +46,7 @@ export default function App() {
     >
       {page === 'dashboard' && <Dashboard onNavigate={setPage} />}
       {page === 'families' && <Families />}
+      {page === 'goals' && <Goals />}
       {page === 'feed' && <Feed />}
       {page === 'community' && <Community />}
       {page === 'communities' && <Communities />}

@@ -54,6 +54,25 @@ export default function Dashboard({ onNavigate }) {
         <StatCard label="Live videos" value={nf.format(ov.videos_live)} sub={`${nf.format(ov.videos_total)} total`} accent="soft" />
       </div>
 
+      {/* Kids' goals highlight */}
+      <button
+        onClick={() => onNavigate?.('goals')}
+        className="w-full text-left mt-5 rounded-xl2 border border-line bg-amber-tint/40 shadow-card p-5 hover:-translate-y-0.5 hover:shadow-[0_8px_26px_-14px_rgba(22,48,44,.35)] transition flex items-center justify-between gap-4"
+      >
+        <div>
+          <div className="flex items-center gap-2">
+            <h3 className="font-display font-600 text-[16px] text-ink">Kids’ goals</h3>
+            <span className="text-teal text-sm">view all ›</span>
+          </div>
+          <p className="text-[13px] text-muted mt-0.5">What kids are saving up for — top items & categories.</p>
+        </div>
+        <div className="flex items-center gap-5 shrink-0">
+          <HeadStat value={nf.format(ov.goals_total ?? 0)} label="registered" />
+          <HeadStat value={nf.format(ov.goals_reached ?? 0)} label="reached 100%" />
+          <HeadStat value={nf.format(ov.goals_fulfilled ?? 0)} label="fulfilled" />
+        </div>
+      </button>
+
       {/* Signups chart */}
       <Card className="p-5 mt-5">
         <div className="flex items-baseline justify-between">
@@ -108,6 +127,15 @@ export default function Dashboard({ onNavigate }) {
         Updated {ov?.generated_at ? new Date(ov.generated_at).toLocaleString('en-US') : '—'}.
         Koddomo principle: no invented data — we prefer an honest “zero” to a pretty, fake curve.
       </p>
+    </div>
+  )
+}
+
+function HeadStat({ value, label }) {
+  return (
+    <div className="text-center">
+      <div className="font-display font-700 text-[22px] text-ink leading-none">{value}</div>
+      <div className="text-[11px] text-muted mt-1 whitespace-nowrap">{label}</div>
     </div>
   )
 }
