@@ -8,6 +8,7 @@ import Goals from './pages/Goals'
 import Feed from './pages/Feed'
 import Community from './pages/Community'
 import Communities from './pages/Communities'
+import Coupons from './pages/Coupons'
 import { Button, Card, KodoMark, Spinner } from './components/ui'
 
 export default function App() {
@@ -50,6 +51,7 @@ export default function App() {
       {page === 'feed' && <Feed />}
       {page === 'community' && <Community />}
       {page === 'communities' && <Communities />}
+      {page === 'coupons' && <Coupons />}
     </Layout>
   )
 }

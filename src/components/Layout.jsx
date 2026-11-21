@@ -7,6 +7,7 @@ const NAV = [
   { key: 'feed', label: 'Feed', icon: FeedIcon },
   { key: 'communities', label: 'Communities', icon: GroupIcon },
   { key: 'community', label: 'Moderation', icon: ShieldIcon },
+  { key: 'coupons', label: 'Coupons', icon: TicketIcon },
 ]
 
 export default function Layout({ page, setPage, email, onSignOut, children }) {
@@ -81,6 +82,9 @@ function QuizIcon() {
 }
 function TargetIcon() {
   return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="2"/><circle cx="12" cy="12" r="4.5" stroke="currentColor" strokeWidth="2"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></svg>
+}
+function TicketIcon() {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 9a2 2 0 002-2V6h14v1a2 2 0 000 4v1a2 2 0 000 4v1H5v-1a2 2 0 00-2-2V9Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/><path d="M11 6v12" stroke="currentColor" strokeWidth="2" strokeDasharray="2 2"/></svg>
 }
 function UsersIcon() {
   return <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" strokeWidth="2"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M16 5.2a3.2 3.2 0 010 5.6M17.5 19c0-2.2-1-4-2.6-4.6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
